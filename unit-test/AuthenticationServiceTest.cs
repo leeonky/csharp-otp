@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using csharp_otp;
+using Rhino.Mocks;
 
 namespace unit_test
 {
