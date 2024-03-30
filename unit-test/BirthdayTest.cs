@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using csharp_otp;
+using Rhino.Mocks;
 
 namespace unit_test
 {
     [TestFixture]
     class BirthdayTest
     {
-
+        /*
         public class StubToday : Today
         {
             private string dateStr;
@@ -23,13 +24,18 @@ namespace unit_test
             {
                 return DateTime.Parse(this.dateStr);
             }
-        }
+        }*/
 
         [Test]
         public void is_birthday()
         {
-            StubToday stubToday = new StubToday();
-            stubToday.SetToday("2002-04-09");
+            //StubToday stubToday = new StubToday();
+            //stubToday.SetToday("2002-04-09");
+            
+            MockRepository mocks = new MockRepository();
+            Today stubToday = mocks.Stub<Today>();
+            Expect.Call(stubToday.GetToday()).Return(DateTime.Parse("2002-04-09"));
+            mocks.ReplayAll();
 
             Birthday birthday = new Birthday(stubToday);
 
@@ -39,8 +45,13 @@ namespace unit_test
         [Test]
         public void is_not_birthday()
         {
-            StubToday stubToday = new StubToday();
-            stubToday.SetToday("2002-05-20");
+            //StubToday stubToday = new StubToday();
+            //stubToday.SetToday("2002-05-20");
+
+            MockRepository mocks = new MockRepository();
+            Today stubToday = mocks.Stub<Today>();
+            Expect.Call(stubToday.GetToday()).Return(DateTime.Parse("2002-05-20"));
+            mocks.ReplayAll();
 
             Birthday birthday = new Birthday(stubToday);
 
