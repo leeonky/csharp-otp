@@ -31,16 +31,36 @@ namespace unit_test
             public string Random { set { random = value; } }
         }
 
-        StubProfileDao profileDao = new StubProfileDao();
-        StubRsaToken rsaToken = new StubRsaToken();
-        Logger logger = new Logger();
+        class MockLogger : Logger
+        {
+            public override void Log(string content)
+            {
+                stringBuider.AppendLine(content);
+            }
+
+            private StringBuilder stringBuider = new StringBuilder();
+
+            public string getLog()
+            {
+                return stringBuider.ToString();
+            }
+        }
+
+        StubProfileDao profileDao;
+        StubRsaToken rsaToken;
+        MockLogger logger;
         AuthenticationService authenticationService;
 
-        public AuthenticationServiceTest()
+        [SetUp]
+        public void SetUpAll()
         {
+            profileDao = new StubProfileDao();
+            rsaToken = new StubRsaToken();
+            logger = new MockLogger();
             authenticationService = new AuthenticationService(profileDao, rsaToken, logger);
         }
 
+        
         [Test]
         public void valid()
         {
@@ -57,6 +77,17 @@ namespace unit_test
             rsaToken.Random = "000000";
 
             Assert.IsFalse(authenticationService.IsValid("joey", "incorrect"));
+        }
+
+        [Test]
+        public void invalid_withlog()
+        {
+            profileDao.Password["joey"] = "91";
+            rsaToken.Random = "000000";
+
+            authenticationService.IsValid("joey", "incorrect");
+
+            Assert.AreEqual("account: joey login failed\r\n", logger.getLog());
         }
     }
 }
