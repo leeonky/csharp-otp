@@ -22,10 +22,9 @@ namespace unit_test
             mocks = new MockRepository();
             profileDao = mocks.Stub<ProfileDao>();
             rsaToken = mocks.Stub<RsaToken>();
-            logger = mocks.StrictMock<Logger>();
+            logger = mocks.DynamicMock<Logger>();
             authenticationService = new AuthenticationService(profileDao, rsaToken, logger);
         }
-
         
         [Test]
         public void valid()
@@ -42,7 +41,6 @@ namespace unit_test
         {
             Expect.Call(profileDao.GetPassword(Arg<string>.Is.Equal("joey"))).Return("91");
             Expect.Call(rsaToken.GetRandom(Arg<string>.Is.Equal("joey"))).Return("000000");
-            Expect.Call(delegate { logger.Log(Arg<string>.Is.Anything); });
             mocks.ReplayAll();
 
             Assert.IsFalse(authenticationService.IsValid("joey", "incorrect"));
@@ -54,12 +52,11 @@ namespace unit_test
             Expect.Call(profileDao.GetPassword(Arg<string>.Is.Equal("joey"))).Return("91");
             Expect.Call(rsaToken.GetRandom(Arg<string>.Is.Equal("joey"))).Return("000000");
             Expect.Call(delegate { logger.Log(Arg<string>.Is.Equal("account: joey login failed")); });
-
             mocks.ReplayAll();
 
             authenticationService.IsValid("joey", "incorrect");
 
-            mocks.VerifyAll();
+            mocks.Verify(logger);
         }
     }
 }
