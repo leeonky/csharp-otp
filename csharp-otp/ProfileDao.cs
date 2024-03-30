@@ -6,7 +6,11 @@ namespace csharp_otp
 {
     public class ProfileDao
     {
-        public virtual string GetPassword(string userName)
+        public 
+#if TEST
+            virtual 
+#endif
+            string GetPassword(string userName)
         {
             return profiles[userName];
         }

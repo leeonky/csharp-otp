@@ -6,7 +6,11 @@ namespace csharp_otp
 {
     public class RsaToken
     {
-        public virtual string GetRandom(string userName)
+        public
+#if TEST
+            virtual
+#endif
+            string GetRandom(string userName)
         {
             return random.Next(1000000).ToString("D6");
         }

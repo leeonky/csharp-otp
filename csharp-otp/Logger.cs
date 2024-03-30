@@ -6,7 +6,11 @@ namespace csharp_otp
 {
     public class Logger
     {
-        public virtual void Log(string content)
+        public
+#if TEST
+            virtual        
+#endif
+            void Log(string content)
         {
             Console.WriteLine(content);
         }
