@@ -11,4 +11,8 @@ To run the test:
 nunit-console.exe /framework=v2.0 .\unit-test\bin\Debug\unit-test.dll
 ```
 
+# VS2019
+
+Please install the following softwares first:
+* Install nunit vs template https://marketplace.visualstudio.com/items?itemName=NUnitDevelopers.NUnitTemplatesforVisualStudio
 
